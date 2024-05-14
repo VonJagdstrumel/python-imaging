@@ -1,0 +1,26 @@
+--- origsrc/pillow-10.3.0/setup.py	2024-04-01 11:27:42.000000000 +0200
++++ src/pillow-10.3.0/setup.py	2024-05-15 16:19:51.477348400 +0200
+@@ -1005,8 +1005,10 @@ while sys.argv[-1].startswith("--pillow-
+     _, key, value = sys.argv.pop().split("=", 2)
+     configuration.setdefault(key, []).append(value)
+ 
+ try:
+     setup(
++        name="pillow",
++        version=PILLOW_VERSION,
+         cmdclass={"build_ext": pil_build_ext},
+         ext_modules=ext_modules,
+         zip_safe=not (debug_build() or PLATFORM_MINGW),
+--- origsrc/pillow-10.3.0/setup.py	2024-04-01 11:27:42.000000000 +0200
++++ src/pillow-10.3.0/setup.py	2024-05-16 01:38:48.067569100 +0200
+@@ -23,7 +23,8 @@ from setuptools.command.build_ext import
+ def get_version():
+     version_file = "src/PIL/_version.py"
+     with open(version_file, encoding="utf-8") as f:
+-        exec(compile(f.read(), version_file, "exec"))
+-    return locals()["__version__"]
++        lc = {}
++        exec(compile(f.read(), version_file, "exec"), None, lc)
++    return lc["__version__"]
+ 
+ 

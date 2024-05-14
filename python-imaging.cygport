@@ -1,8 +1,8 @@
-ORIG_PN="Pillow"
+ORIG_PN="pillow"
 inherit python-wheel
 
 NAME="python-imaging"
-VERSION=9.0.0
+VERSION=10.3.0
 RELEASE=1
 CATEGORY="Python"
 SUMMARY="Python Imaging Library"
@@ -11,10 +11,12 @@ to your Python interpreter. This library supports many file formats, and provide
 powerful image processing and graphics capabilities."
 HOMEPAGE="https://python-pillow.github.io/"
 
-SRC_URI="https://files.pythonhosted.org/packages/b0/43/3e286c93b9fa20e233d53532cc419b5aad8a468d91065dbef4c846058834/Pillow-9.0.0.tar.gz"
-SRC_DIR="Pillow-${VERSION}"
+SRC_URI="https://files.pythonhosted.org/packages/ef/43/c50c17c5f7d438e836c169e343695534c38c77f60e7c90389bd77981bc21/pillow-10.3.0.tar.gz"
+PATCH_URI="${PN}.patch"
 
-BUILD_REQUIRES="libjpeg-devel libjpeg8 zlib-devel zlib0 libtiff-devel libtiff6 libfreetype-devel libfreetype6 liblcms2-devel lcms2 libwebp libwebp-devel tcl-devel tcl libimagequant-devel libimagequant0 libraqm-devel libraqm0 libX11-xcb-devel libX11-xcb1 libxcb-devel libxcb1 python311 python311-devel python311-setuptools python311-wheel python311-pip python311-olefile"
+BUILD_REQUIRES="libjpeg-devel libjpeg8 zlib-devel zlib0 libtiff-devel libtiff6 libfreetype-devel libfreetype6 liblcms2-devel lcms2 libwebp libwebp-devel tcl-devel tcl libimagequant-devel libimagequant0 libraqm-devel libraqm0 libX11-xcb-devel libX11-xcb1 libxcb-devel libxcb1"
+BUILD_REQUIRES+=" python311 python311-devel python311-setuptools python311-wheel python311-pip python311-olefile"
+BUILD_REQUIRES+=" python313 python313-devel python313-setuptools python313-wheel python313-pip python313-olefile"
 
 DIFF_EXCLUDES="build"
 
@@ -28,7 +30,7 @@ src_test() {
 	done
 }
 
-PKG_NAMES=" python311-imaging python311-imaging-tk"
+PKG_NAMES=" python311-imaging python311-imaging-tk python313-imaging python313-imaging-tk"
 
 # ImageQt no longer imports PyQt or PySide, but simply integrates with
 # whatever has already been imported.  Therefore there is no need to
@@ -47,6 +49,21 @@ python311_imaging_tk_CONTENTS="
 	usr/lib/python3.11/site-packages/PIL/SpiderImagePlugin*
 	usr/lib/python3.11/site-packages/PIL/__pycache__/ImageTk*
 	usr/lib/python3.11/site-packages/PIL/__pycache__/SpiderImagePlugin*
+"
+python313_imaging_REQUIRES="python313 python313-olefile"
+python313_imaging_CONTENTS="
+	--exclude=_imagingtk*
+	--exclude=ImageTk*
+	--exclude=SpiderImagePlugin*
+	${python313_imaging_CONTENTS}
+"
+python313_imaging_tk_REQUIRES="python313-imaging python313-tkinter"
+python313_imaging_tk_CONTENTS="
+	usr/lib/python3.13/site-packages/PIL/_imagingtk*
+	usr/lib/python3.13/site-packages/PIL/ImageTk*
+	usr/lib/python3.13/site-packages/PIL/SpiderImagePlugin*
+	usr/lib/python3.13/site-packages/PIL/__pycache__/ImageTk*
+	usr/lib/python3.13/site-packages/PIL/__pycache__/SpiderImagePlugin*
 "
 python_imaging_debuginfo_OBSOLETES="python3-imaging-debuginfo"
 PKG_IGNORE="usr/share/doc/python*-imaging-*/"
